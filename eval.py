@@ -4,7 +4,6 @@ from argparse import ArgumentParser
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoTokenizer
 from unsloth import FastLanguageModel
 
 from dataset import load_test_dataset, load_val_dataset
@@ -59,14 +58,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    model, _ = FastLanguageModel.from_pretrained(
+    model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=args.model_path,
         max_seq_length=args.max_seq_length,
         dtype=None,
         load_in_4bit=args.load_in_4bit,
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path, padding_side="left")
+    tokenizer.padding_side = "left"
 
     FastLanguageModel.for_inference(model)
 
