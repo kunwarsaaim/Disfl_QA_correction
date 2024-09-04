@@ -2,8 +2,8 @@ import itertools
 from argparse import ArgumentParser
 
 import torch
-import tqdm import tqdm
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from unsloth import FastLanguageModel
 
 from dataset import load_test_dataset, load_train_and_val_datasets
