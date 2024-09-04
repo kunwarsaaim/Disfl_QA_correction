@@ -22,7 +22,7 @@ def bleu_score(preds, refs):
 
 def rouge_score(preds, refs):
     metric = evaluate.load("rouge")
-    result = metric.compute(predictions=preds, references=refs, use_agregator=True)
+    result = metric.compute(predictions=preds, references=refs, use_aggregator=True)
     return result["rouge1"], result["rougeL"]
 
 
