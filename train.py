@@ -35,7 +35,7 @@ if __name__ == "__main__":
     if args.load_in_4bit:
         optim = "adamw_8bit"
     else:
-        optim = "adamw"
+        optim = "adamw_torch"
 
     early_stopping_callback = EarlyStoppingCallback(
         early_stopping_patience=2,  # Number of evaluations with no improvement
