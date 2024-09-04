@@ -31,7 +31,7 @@ def inference(model, tokenizer, test_dataset, batch_size=64):
                 max_new_tokens=128,
                 use_cache=True,
                 temperature=1.5,
-                min_p=0.1
+                min_p=0.1,
             )
 
             new_tokens = outputs[:, input_lengths:]
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     val_metrics = evaluate_metrics(inference_val, val_dataset["original question"])
     print("Validation metrics: ", val_metrics)
 
-    with open(f"val_metrics-{args.model_path.split("/")[-1]}.txt", "w") as f:
+    with open(f"val_metrics-{args.model_path.split('/')[-1]}.txt", "w") as f:
         f.write(str(val_metrics))
 
     inference_test = inference(
@@ -82,5 +82,5 @@ if __name__ == "__main__":
     test_metrics = evaluate_metrics(inference_test, test_dataset["original question"])
     print("Test metrics: ", test_metrics)
 
-    with open(f"test_metrics-{args.model_path.split("/")[-1]}.txt", "w") as f:
+    with open(f"test_metrics-{args.model_path.split('/')[-1]}.txt", "w") as f:
         f.write(str(test_metrics))
