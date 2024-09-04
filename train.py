@@ -28,18 +28,13 @@ if __name__ == "__main__":
         max_seq_length=args.max_seq_length,
         load_in_4bit=args.load_in_4bit,
     )
-    if args.load_in_4bit:
-        quant = "4bit"
-    else:
-        quant = "fp16"
+    quant = "4bit" if args.load_in_4bit else "fp16"
+
     model = get_lora_adapter(model, rank=args.rank)
 
     train_dataset, val_dataset = load_train_and_val_datasets(tokenizer)
 
-    if args.load_in_4bit:
-        optim = "adamw_8bit"
-    else:
-        optim = "adamw_torch"
+    optim = "adamw_8bit" if args.load_in_4bit else "adamw_torch"
 
     early_stopping_callback = EarlyStoppingCallback(
         early_stopping_patience=2,  # Number of evaluations with no improvement
