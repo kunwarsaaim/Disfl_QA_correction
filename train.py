@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 
 from transformers import TrainingArguments
+from transformers.trainer_callback import EarlyStoppingCallback
 from trl import SFTTrainer
 from unsloth import is_bfloat16_supported
 
@@ -23,7 +24,10 @@ if __name__ == "__main__":
         max_seq_length=args.max_seq_length,
         load_in_4bit=args.load_in_4bit,
     )
-
+    if args.load_in_4bit:
+        quant = "4bit"
+    else:
+        quant = "fp16"
     model = get_lora_adapter(model, rank=args.rank)
 
     train_dataset, val_dataset = load_train_and_val_datasets(tokenizer)
@@ -33,6 +37,10 @@ if __name__ == "__main__":
     else:
         optim = "adamw"
 
+    early_stopping_callback = EarlyStoppingCallback(
+        early_stopping_patience=2,  # Number of evaluations with no improvement
+        early_stopping_threshold=0.05,  # Minimum change to qualify as an improvement
+    )
     trainer = SFTTrainer(
         model=model,
         tokenizer=tokenizer,
@@ -40,8 +48,7 @@ if __name__ == "__main__":
         eval_dataset=val_dataset,
         dataset_text_field="text",
         max_seq_length=args.max_seq_length,
-        # data_collator=DataCollatorForSeq2Seq(tokenizer=tokenizer),
-        dataset_num_proc=2,
+        dataset_num_proc=3,
         packing=False,  # Can make training 5x faster for short sequences.
         args=TrainingArguments(
             per_device_train_batch_size=16,
@@ -62,27 +69,16 @@ if __name__ == "__main__":
             save_total_limit=3,
             load_best_model_at_end=True,
             seed=3407,
-            output_dir=f"outputs-{args.model_name}",
+            output_dir=f"outputs-{args.model_name}-{quant}-disfl_qa",
         ),
+        callbacks=[early_stopping_callback],
     )
-
-    # if tokenizer.name_or_path.split("/")[-1] == "Phi-3.5-mini-instruct":
-    #     instruction_part = "<|user|>\n"
-    #     response_part = "<|assistant|>\n"
-    # if (
-    #     tokenizer.name_or_path.split("/")[-1] == "Meta-Llama-3.1-8B-Instruct-bnb-4bit"
-    #     or tokenizer.name_or_path.split("/")[-1] == "Meta-Llama-3.1-8B-Instruct"
-    # ):
-    #     instruction_part = "<|start_header_id|>user<|end_header_id|>\n\n"
-    #     response_part = "<|start_header_id|>assistant<|end_header_id|>\n\n"
-
-    # trainer = train_on_responses_only(
-    #     trainer,
-    #     instruction_part=instruction_part,
-    #     response_part=response_part,
-    # )
 
     trainer_stats = trainer.train()
 
-    model.save_pretrained(f"lora_model-{args.model_name.split('/')[-1]}-disfl_qa")
-    tokenizer.save_pretrained(f"lora_model-{args.model_name.split('/')[-1]}-disfl_qa")
+    model.save_pretrained(
+        f"lora_model-{args.model_name.split('/')[-1]}-{quant}-disfl_qa"
+    )
+    tokenizer.save_pretrained(
+        f"lora_model-{args.model_name.split('/')[-1]}-{quant}-disfl_qa"
+    )
