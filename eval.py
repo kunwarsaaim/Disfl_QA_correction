@@ -22,7 +22,7 @@ def inference(model, tokenizer, test_dataset, batch_size=64):
 
         test_tokens = tokenizer(
             batch, padding=True, add_special_tokens=False, return_tensors="pt"
-        )
+        ).to(model.device)
         input_lengths = test_tokens["input_ids"].shape[1]
 
         with torch.no_grad():
