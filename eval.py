@@ -50,7 +50,11 @@ if __name__ == "__main__":
         "--model_path", type=str, default="lora_model-Phi-3.5-mini-instruct-disfl_qa"
     )
     parser.add_argument("--max_seq_length", type=int, default=256)
-    parser.add_argument("--load_in_4bit", type=bool, default=True)
+    parser.add_argument(
+        "--load_in_4bit",
+        action="store_true",
+        help="Whether to load model in 4-bit precision",
+    )
     parser.add_argument("--batch_size", type=int, default=64)
 
     args = parser.parse_args()
