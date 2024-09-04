@@ -15,9 +15,9 @@ import evaluate
 
 
 def bleu_score(preds, refs):
-    metric = evaluate.load("blue")
+    metric = evaluate.load("bleu")
     result = metric.compute(predictions=preds, references=refs)
-    return result["blue"]
+    return result["bleu"]
 
 
 def rouge_score(preds, refs):
