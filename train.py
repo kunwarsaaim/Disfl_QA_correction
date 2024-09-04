@@ -15,7 +15,11 @@ if __name__ == "__main__":
         "--model_name", type=str, default="unsloth/Phi-3.5-mini-instruct"
     )
     parser.add_argument("--max_seq_length", type=int, default=256)
-    parser.add_argument("--load_in_4bit", type=bool, default=True)
+    parser.add_argument(
+        "--load_in_4bit",
+        action="store_true",
+        help="Whether to load model in 4-bit precision",
+    )
     parser.add_argument("--rank", type=int, default=8)
     args = parser.parse_args()
 
