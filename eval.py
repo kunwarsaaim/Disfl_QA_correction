@@ -7,7 +7,7 @@ from tqdm import tqdm
 from transformers import AutoTokenizer
 from unsloth import FastLanguageModel
 
-from dataset import load_test_dataset, load_train_and_val_datasets
+from dataset import load_test_dataset, load_val_dataset
 from metrics import evaluate_metrics
 
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     FastLanguageModel.for_inference(model)
 
-    train_dataset, val_dataset = load_train_and_val_datasets(tokenizer)
+    val_dataset = load_val_dataset(tokenizer)
 
     test_dataset = load_test_dataset(tokenizer)
 
