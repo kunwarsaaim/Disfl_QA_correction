@@ -2,7 +2,7 @@ import itertools
 from argparse import ArgumentParser
 
 import torch
-import tqdm
+import tqdm import tqdm
 from torch.utils.data import DataLoader
 from unsloth import FastLanguageModel
 
@@ -18,7 +18,7 @@ def inference(model, tokenizer, test_dataset, batch_size=64):
 
     inference_results = []
 
-    for batch in tqdm(test_data_loader):
+    for batch in tqdm(test_data_loader, desc="Processing Batches"):
 
         test_tokens = tokenizer(
             batch, padding=True, add_special_tokens=False, return_tensors="pt"
@@ -70,6 +70,7 @@ if __name__ == "__main__":
     inference_val = inference(model, tokenizer, val_dataset, batch_size=args.batch_size)
 
     val_metrics = evaluate_metrics(inference_val, val_dataset["original question"])
+
     print("Validation metrics: ", val_metrics)
 
     with open(f"val_metrics-{args.model_path.split('/')[-1]}.txt", "w") as f:
@@ -80,6 +81,7 @@ if __name__ == "__main__":
     )
 
     test_metrics = evaluate_metrics(inference_test, test_dataset["original question"])
+
     print("Test metrics: ", test_metrics)
 
     with open(f"test_metrics-{args.model_path.split('/')[-1]}.txt", "w") as f:
