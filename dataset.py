@@ -48,3 +48,11 @@ def load_test_dataset(tokenizer):
         formatting_prompt_test_data, fn_kwargs={"tokenizer": tokenizer}
     )
     return test_dataset
+
+
+def load_val_dataset(tokenizer):
+    val_dataset = load_dataset("google-research-datasets/disfl_qa", split="validation")
+    val_dataset = val_dataset.map(
+        formatting_prompt_test_data, fn_kwargs={"tokenizer": tokenizer}
+    )
+    return val_dataset
