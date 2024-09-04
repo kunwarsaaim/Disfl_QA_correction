@@ -33,7 +33,7 @@ if __name__ == "__main__":
     train_dataset, val_dataset = load_train_and_val_datasets(tokenizer)
 
     if args.load_in_4bit:
-        optim = "adamw_4bit"
+        optim = "adamw_8bit"
     else:
         optim = "adamw"
 
