@@ -60,6 +60,7 @@ if __name__ == "__main__":
         dtype=None,
         load_in_4bit=args.load_in_4bit,
     )
+    tokenizer.padding_side = "left"
 
     FastLanguageModel.for_inference(model)
 
