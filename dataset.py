@@ -30,8 +30,8 @@ def formatting_prompt_test_data(example, tokenizer):
 
 
 def load_train_and_val_datasets(tokenizer):
-    train_dataset = load_dataset("google-research-datasets/disfl_qa", "train")
-    val_dataset = load_dataset("google-research-datasets/disfl_qa", "validation")
+    train_dataset = load_dataset("google-research-datasets/disfl_qa", split="train")
+    val_dataset = load_dataset("google-research-datasets/disfl_qa", split="validation")
 
     train_dataset = train_dataset.map(
         formatting_prompts_func, fn_kwargs={"tokenizer": tokenizer}
@@ -43,7 +43,7 @@ def load_train_and_val_datasets(tokenizer):
 
 
 def load_test_dataset(tokenizer):
-    test_dataset = load_dataset("google-research-datasets/disfl_qa", "test")
+    test_dataset = load_dataset("google-research-datasets/disfl_qa", split="test")
     test_dataset = test_dataset.map(
         formatting_prompt_test_data, fn_kwargs={"tokenizer": tokenizer}
     )
