@@ -15,19 +15,19 @@ import evaluate
 
 
 def bleu_score(preds, refs):
-    metric = evaluate.load_metric("blue")
+    metric = evaluate.load("blue")
     result = metric.compute(predictions=preds, references=refs)
     return result["blue"]
 
 
 def rouge_score(preds, refs):
-    metric = evaluate.load_metric("rouge")
+    metric = evaluate.load("rouge")
     result = metric.compute(predictions=preds, references=refs, use_agregator=True)
     return result["rouge1"], result["rougeL"]
 
 
 def exact_match_score(preds, refs):
-    metric = evaluate.load_metric("exact_match")
+    metric = evaluate.load("exact_match")
     result = metric.compute(predictions=preds, references=refs)
     return result["exact_match"]
 
