@@ -72,9 +72,15 @@ if __name__ == "__main__":
     val_metrics = evaluate_metrics(inference_val, val_dataset["original question"])
     print("Validation metrics: ", val_metrics)
 
+    with open(f"val_metrics-{args.model_path.split("/")[-1]}.txt", "w") as f:
+        f.write(str(val_metrics))
+
     inference_test = inference(
         model, tokenizer, test_dataset, batch_size=args.batch_size
     )
 
     test_metrics = evaluate_metrics(inference_test, test_dataset["original question"])
     print("Test metrics: ", test_metrics)
+
+    with open(f"test_metrics-{args.model_path.split("/")[-1]}.txt", "w") as f:
+        f.write(str(test_metrics))
